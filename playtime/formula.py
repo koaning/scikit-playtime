@@ -1,7 +1,40 @@
-from sklearn.base import clone
+import numpy as np 
+import polars as pl
+from time import time as timer
+import itertools as it 
+from sklearn.base import clone, BaseEstimator, MetaEstimatorMixin
 from sklearn.pipeline import make_pipeline, make_union, FeatureUnion
-from sklearn.preprocessing import PolynomialFeatures, SplineTransformer, OneHotEncoder
+from sklearn.preprocessing import PolynomialFeatures, SplineTransformer, OneHotEncoder, FunctionTransformer
+from sklearn.feature_extraction.text import CountVectorizer
 from skrub import SelectCols
+from scipy.sparse import hstack, coo_array, issparse, csc_array
+
+
+class UnionPolynomialFeaturizer(BaseEstimator, MetaEstimatorMixin):
+    def __init__(self, union_estimator):
+        """Like the normal polynomial featurizer, but in this case only consider the product from different transformers"""
+        self.union_estimator = union_estimator
+
+    def fit(self, X, y=None):
+        X_tfm = self.union_estimator.fit_transform(X)
+        total = X_tfm.shape[1]
+        # todo: kind of hacky. clean? 
+        self.split_at_ = self.union_estimator.transformer_list[0][1].transform(X[:2]).shape[1]
+        self.shape_out_ = self.split_at_ * (total - self.split_at_)
+        return self
+
+    def transform(self, X):
+        columns = []
+        X_tfm = self.union_estimator.transform(X)
+        if issparse(X_tfm):
+            X_tfm = csc_array(X_tfm)
+        X1, X2 = X_tfm[:, :self.split_at_], X_tfm[:, self.split_at_:]
+        for x in range(X2.shape[1]):
+            columns.append(X1 * X2[:, [x]])
+        if issparse(X_tfm):
+            return hstack(columns, dtype=X_tfm.dtype).tocsc()
+        return np.hstack(columns, dtype=X_tfm.dtype)
+
 
 class Node:
     def __init__(self, pipeline):
@@ -16,27 +49,45 @@ class Node:
             new_pipeline = make_union(self.pipeline, other.pipeline)
         return Node(pipeline=new_pipeline)
 
-    def __mul__(self, other):
-        combined = make_pipeline(
-            make_union(clone(self.pipeline), clone(other.pipeline)), 
-            PolynomialFeatures(degree=2, interaction_only=True)
-        )
-        return Node(pipeline=combined)
+    def fit(self, X, y=None, **kwargs):
+        self.pipeline.fit(X, y, **kwargs)
+        return self
 
+    def transform(self, X, y=None, **kwargs):
+        return self.pipeline.transform(X, y, **kwargs)
 
-def seasonal(colname):
+    def fit_transform(self, X, y=None, **kwargs):
+        return self.pipeline.fit_transform(X, y, **kwargs)
+
+def datetime_feats(dataf, column):
+    nw_df = nw.from_native(dataf)
+    
+    nw_out = nw_df.with_columns(
+        day_of_year=nw.col(column).str.to_datetime(format="%Y-%m-%d").dt.ordinal_day()
+    ).select("day_of_year")
+    
+    return nw.to_native(nw_out)
+
+def column_pluck(dataf, column):
+    return pl.DataFrame(dataf)[column].to_list()
+
+def seasonal(colname, n_knots=12):
     return Node(pipeline=make_pipeline(
-        SelectCols([colname]),
-        SplineTransformer(extrapolation="periodic", knots="uniform", n_knots=5)
+        FunctionTransformer(datetime_feats, kw_args={'column': colname}),
+        SplineTransformer(extrapolation="periodic", knots="uniform", n_knots=n_knots)
     ))
 
 def feats(*colnames):
     return Node(pipeline=SelectCols([col for col in colnames]))
 
 def dummy(*colnames):
-    return Node(pipeline=make_union(
-        *[make_pipeline(SelectCols(col), OneHotEncoder()) for col in colnames]
-    ))
+    return Node(pipeline=make_pipeline(SelectCols(colnames), OneHotEncoder()))
 
 def time(colname):
     return Node(pipeline=SelectCols([colname]))
+
+def bag_of_words(colname, **kwargs):
+    return Node(pipeline=make_pipeline(
+        FunctionTransformer(column_pluck, kw_args={'column': colname}),
+        CountVectorizer(**kwargs)
+    ))

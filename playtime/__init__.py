@@ -1,5 +1,7 @@
+import pandas as pd 
 from sklearn.utils.fixes import parse_version, sp_version
-from sklearn.linear_model import QuantileRegressor
+from sklearn.linear_model import Ridge
+from sklearn.ensemble import HistGradientBoostingRegressor
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import FunctionTransformer
 
@@ -10,6 +12,7 @@ solver = "highs" if sp_version >= parse_version("1.6.0") else "interior-point"
 def add_ts_features_pd(dataf, ts_col="timestamp"):
     result = (
         dataf
+        .assign(**{ts_col: lambda d: pd.to_datetime(d[ts_col])})
         .assign(
             day_of_week=lambda d: d[ts_col].dt.day_of_week,
             day_of_year=lambda d: d[ts_col].dt.day_of_year,
@@ -44,8 +47,10 @@ class PlaytimeModel:
 
     def learn(self, dataf):
         X = self.transform(dataf)
-        self.models_ = {q: QuantileRegressor(quantile=q, solver=solver, alpha=0) for q in self.quantiles}
+        print(f"Transformed data has shape={X.shape}.")
+        self.models_ = {q: Ridge(positive=True, fit_intercept=False) for q in self.quantiles}
         for k, model in self.models_.items():
+            print(f"Fitting model for quantile {k}.")
             model.fit(X, dataf[self.target_col])
         return self
 
