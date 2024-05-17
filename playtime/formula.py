@@ -1,5 +1,6 @@
 import numpy as np 
 import polars as pl
+import narwhals as nw
 from time import time as timer
 import itertools as it 
 from sklearn.base import clone, BaseEstimator, MetaEstimatorMixin
