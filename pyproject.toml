@@ -3,7 +3,7 @@ requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "playtime"
+name = "scikit-playtime"
 version = "0.1.0"
 description="Rethinking machine learning pipelines a bit."
 
@@ -39,3 +39,12 @@ classifiers = [
 repository = "https://github.com/koaning/playtime"
 issue-tracker = "https://github.com/koaning/playtime/issues"
 documentation = "https://koaning.github.io/playtime/"
+
+[tool.setuptools.packages.find]
+include = ["playtime*"]
+exclude = [
+    "docs",
+    "images",
+    "notebooks",
+    "tests",
+]

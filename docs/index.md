@@ -3,11 +3,11 @@ hide:
   - navigation
 ---
 
-# playtime
+# scikit-playtime
 
 > Rethinking machine learning pipelines a bit.
 
-## What does `playtime` do? 
+## What does `scikit-playtime` do? 
 
 I was wondering if there might be an easier way to construct scikit-learn pipelines. Don't get me wrong, scikit-learn is amazing when you want elaborate pipelines (exibit A, exibit B) but maybe there is also a place for something more lightweight and playful. This library is all about exploring that.
 
@@ -986,7 +986,7 @@ plt.plot(np.arange(0, pltr.shape[0]), pltr['pred'], linewidth=4);
 Feel like playing around with this? You can do this right now by installing via pip:
 
 ```python
-python -m pip install playtime
+python -m pip install scikit-playtime
 ```
 
 That said, please consider this to be an experimental project where things may break. There is still much to explore here and that will be done in public. In the future this project will explore:
