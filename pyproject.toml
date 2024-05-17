@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "playtime"
+version = "0.1.0"
+description="Rethinking machine learning pipelines a bit."
+
+license = {file = "LICENSE"}
+readme = "readme.md"
+requires-python = ">=3.8"
+authors = [
+    {name = "Vincent D. Warmerdam"},
+]
+
+dependencies = [
+    "scikit-learn>=1.0",
+    "narwhals>=0.8.14",
+    "skrub>=0.1.0",
+    "importlib-metadata >= 1.0; python_version < '3.8'",
+    "importlib-resources; python_version < '3.9'",
+]
+
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "License :: OSI Approved :: MIT License",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+[project.urls]
+repository = "https://github.com/koaning/playtime"
+issue-tracker = "https://github.com/koaning/playtime/issues"
+documentation = "https://koaning.github.io/playtime/"

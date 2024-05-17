@@ -1,14 +1,12 @@
-import numpy as np 
-import polars as pl
 import narwhals as nw
-from time import time as timer
-import itertools as it 
-from sklearn.base import clone, BaseEstimator, MetaEstimatorMixin
-from sklearn.pipeline import make_pipeline, make_union, FeatureUnion
-from sklearn.preprocessing import PolynomialFeatures, SplineTransformer, OneHotEncoder, FunctionTransformer
+import numpy as np
+import polars as pl
+from scipy.sparse import csc_array, hstack, issparse
+from sklearn.base import BaseEstimator, MetaEstimatorMixin, clone
 from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.pipeline import FeatureUnion, make_pipeline, make_union
+from sklearn.preprocessing import FunctionTransformer, OneHotEncoder, SplineTransformer
 from skrub import SelectCols
-from scipy.sparse import hstack, coo_array, issparse, csc_array
 
 
 class UnionPolynomialFeaturizer(BaseEstimator, MetaEstimatorMixin):
@@ -19,7 +17,7 @@ class UnionPolynomialFeaturizer(BaseEstimator, MetaEstimatorMixin):
     def fit(self, X, y=None):
         X_tfm = self.union_estimator.fit_transform(X)
         total = X_tfm.shape[1]
-        # todo: kind of hacky. clean? 
+        # todo: kind of hacky. clean?
         self.split_at_ = self.union_estimator.transformer_list[0][1].transform(X[:2]).shape[1]
         self.shape_out_ = self.split_at_ * (total - self.split_at_)
         return self
@@ -29,7 +27,7 @@ class UnionPolynomialFeaturizer(BaseEstimator, MetaEstimatorMixin):
         X_tfm = self.union_estimator.transform(X)
         if issparse(X_tfm):
             X_tfm = csc_array(X_tfm)
-        X1, X2 = X_tfm[:, :self.split_at_], X_tfm[:, self.split_at_:]
+        X1, X2 = X_tfm[:, : self.split_at_], X_tfm[:, self.split_at_ :]
         for x in range(X2.shape[1]):
             columns.append(X1 * X2[:, [x]])
         if issparse(X_tfm):
@@ -60,35 +58,45 @@ class Node:
     def fit_transform(self, X, y=None, **kwargs):
         return self.pipeline.fit_transform(X, y, **kwargs)
 
+
 def datetime_feats(dataf, column):
     nw_df = nw.from_native(dataf)
-    
-    nw_out = nw_df.with_columns(
-        day_of_year=nw.col(column).str.to_datetime(format="%Y-%m-%d").dt.ordinal_day()
-    ).select("day_of_year")
-    
+
+    nw_out = nw_df.with_columns(day_of_year=nw.col(column).str.to_datetime(format="%Y-%m-%d").dt.ordinal_day()).select(
+        "day_of_year"
+    )
+
     return nw.to_native(nw_out)
+
 
 def column_pluck(dataf, column):
     return pl.DataFrame(dataf)[column].to_list()
 
+
 def seasonal(colname, n_knots=12):
-    return Node(pipeline=make_pipeline(
-        FunctionTransformer(datetime_feats, kw_args={'column': colname}),
-        SplineTransformer(extrapolation="periodic", knots="uniform", n_knots=n_knots)
-    ))
+    return Node(
+        pipeline=make_pipeline(
+            FunctionTransformer(datetime_feats, kw_args={"column": colname}),
+            SplineTransformer(extrapolation="periodic", knots="uniform", n_knots=n_knots),
+        )
+    )
+
 
 def feats(*colnames):
     return Node(pipeline=SelectCols([col for col in colnames]))
 
+
 def dummy(*colnames):
     return Node(pipeline=make_pipeline(SelectCols(colnames), OneHotEncoder()))
+
 
 def time(colname):
     return Node(pipeline=SelectCols([colname]))
 
+
 def bag_of_words(colname, **kwargs):
-    return Node(pipeline=make_pipeline(
-        FunctionTransformer(column_pluck, kw_args={'column': colname}),
-        CountVectorizer(**kwargs)
-    ))
+    return Node(
+        pipeline=make_pipeline(
+            FunctionTransformer(column_pluck, kw_args={"column": colname}), CountVectorizer(**kwargs)
+        )
+    )

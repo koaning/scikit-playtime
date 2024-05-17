@@ -1,0 +1,23 @@
+site_name: playtime
+site_description: Rethinking machine learning pipelines a bit.
+repo_url: https://github.com/koaning/playtime
+theme:
+  name: material
+  palette:
+    primary: white
+  features:
+    - content.code.copy
+plugins:
+  - mkdocstrings:
+      default_handler: python
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - attr_list
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
