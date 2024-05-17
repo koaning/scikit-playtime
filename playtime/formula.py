@@ -86,7 +86,7 @@ def feats(*colnames):
     return Node(pipeline=SelectCols([col for col in colnames]))
 
 
-def dummy(*colnames):
+def onehot(*colnames):
     return Node(pipeline=make_pipeline(SelectCols(colnames), OneHotEncoder()))
 
 
