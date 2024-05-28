@@ -97,6 +97,7 @@ def time(colname):
 def bag_of_words(colname, **kwargs):
     return Node(
         pipeline=make_pipeline(
-            FunctionTransformer(column_pluck, kw_args={"column": colname}), CountVectorizer(**kwargs)
+            FunctionTransformer(column_pluck, kw_args={"column": colname}), 
+            CountVectorizer(**kwargs)
         )
     )
