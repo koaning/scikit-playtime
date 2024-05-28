@@ -1,15 +1,8 @@
 .PHONY: docs
 
 install:
-	python -m pip install -e ".[dev]"
-	pre-commit install
-
-test:
-	pytest -n auto --disable-warnings --cov=sklego
-	rm -rf .coverage*
-
-precommit:
-	pre-commit run
+	python -m pip install -e .
+	python -m pip install polars pandas pytest ruff
 
 docs:
 	mkdocs serve
