@@ -52,8 +52,8 @@ class Node:
         self.pipeline.fit(X, y, **kwargs)
         return self
 
-    def transform(self, X, y=None, **kwargs):
-        return self.pipeline.transform(X, y, **kwargs)
+    def transform(self, X, **kwargs):
+        return self.pipeline.transform(X, **kwargs)
 
     def fit_transform(self, X, y=None, **kwargs):
         return self.pipeline.fit_transform(X, y, **kwargs)

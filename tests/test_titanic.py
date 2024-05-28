@@ -1,4 +1,5 @@
 import pytest
+import numpy as np
 from pathlib import Path
 from playtime.formula import feats, onehot, bag_of_words
 import pandas as pd
@@ -31,15 +32,16 @@ def test_bow(df):
 
 
 @pytest.mark.parametrize('df', [pd.read_csv(titanic_path), pl.read_csv(titanic_path)])
-def test_pipeline(df):
-    feat_pipe = feats("age", "fare", "sibsp", "parch") + onehot("sex", "pclass") + bag_of_words("name")
+@pytest.mark.parametrize('feat_pipe', [feats("age", "fare", "sibsp", "parch"), feats("age", "fare", "sibsp", "parch") + onehot("sex", "pclass") + bag_of_words("name")])
+def test_pipeline(df, feat_pipe):
+    y = np.array(df['survived'])
     # Confirm that we can fit just the features
-    assert feat_pipe.fit_transform(df)
-    print(feat_pipe).fit_transform(df)
-    full_pipe = make_pipeline(feat_pipe, LogisticRegression(max_iter=1000))
+    assert feat_pipe.fit_transform(df).shape
+    
     # Confirm that we can fit like normal
-    assert full_pipe.fit(df, df['survived'])
+    full_pipe = make_pipeline(feat_pipe, LogisticRegression(max_iter=1000))
+    assert full_pipe.fit(df, y).predict(df).shape
+    
     # Confirm that we can gridsearch too
     grid = GridSearchCV(full_pipe, {}, cv=2)
-    print(df['survived'].to_list())
-    assert grid.fit(df, df['survived'])
+    assert grid.fit(df, y).predict(df).shape
