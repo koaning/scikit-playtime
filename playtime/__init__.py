@@ -25,7 +25,13 @@ def add_ts_features_pd(dataf, ts_col="timestamp"):
 
 class PlaytimeModel:
     def __init__(
-        self, formula, decay=0.999, quantiles=[0.1, 0.5, 0.9], target_col="y", model_by=None, ts_col="timestamp"
+        self,
+        formula,
+        decay=0.999,
+        quantiles=[0.1, 0.5, 0.9],
+        target_col="y",
+        model_by=None,
+        ts_col="timestamp",
     ):
         self.formula = formula
         self.decay = decay
@@ -47,7 +53,9 @@ class PlaytimeModel:
     def learn(self, dataf):
         X = self.transform(dataf)
         print(f"Transformed data has shape={X.shape}.")
-        self.models_ = {q: Ridge(positive=True, fit_intercept=False) for q in self.quantiles}
+        self.models_ = {
+            q: Ridge(positive=True, fit_intercept=False) for q in self.quantiles
+        }
         for k, model in self.models_.items():
             print(f"Fitting model for quantile {k}.")
             model.fit(X, dataf[self.target_col])

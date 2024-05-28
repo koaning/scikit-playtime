@@ -18,7 +18,9 @@ class UnionPolynomialFeaturizer(BaseEstimator, MetaEstimatorMixin):
         X_tfm = self.union_estimator.fit_transform(X)
         total = X_tfm.shape[1]
         # todo: kind of hacky. clean?
-        self.split_at_ = self.union_estimator.transformer_list[0][1].transform(X[:2]).shape[1]
+        self.split_at_ = (
+            self.union_estimator.transformer_list[0][1].transform(X[:2]).shape[1]
+        )
         self.shape_out_ = self.split_at_ * (total - self.split_at_)
         return self
 
@@ -35,7 +37,7 @@ class UnionPolynomialFeaturizer(BaseEstimator, MetaEstimatorMixin):
         return np.hstack(columns, dtype=X_tfm.dtype)
 
 
-class Node:
+class PlaytimePipeline(BaseEstimator):
     def __init__(self, pipeline):
         self.pipeline = pipeline
 
@@ -46,14 +48,14 @@ class Node:
             new_pipeline = make_union(*new_transformers)
         else:
             new_pipeline = make_union(self.pipeline, other.pipeline)
-        return Node(pipeline=new_pipeline)
+        return PlaytimePipeline(pipeline=new_pipeline)
 
     def fit(self, X, y=None, **kwargs):
         self.pipeline.fit(X, y, **kwargs)
         return self
 
-    def transform(self, X, y=None, **kwargs):
-        return self.pipeline.transform(X, y, **kwargs)
+    def transform(self, X, **kwargs):
+        return self.pipeline.transform(X, **kwargs)
 
     def fit_transform(self, X, y=None, **kwargs):
         return self.pipeline.fit_transform(X, y, **kwargs)
@@ -62,9 +64,9 @@ class Node:
 def datetime_feats(dataf, column):
     nw_df = nw.from_native(dataf)
 
-    nw_out = nw_df.with_columns(day_of_year=nw.col(column).str.to_datetime(format="%Y-%m-%d").dt.ordinal_day()).select(
-        "day_of_year"
-    )
+    nw_out = nw_df.with_columns(
+        day_of_year=nw.col(column).str.to_datetime(format="%Y-%m-%d").dt.ordinal_day()
+    ).select("day_of_year")
 
     return nw.to_native(nw_out)
 
@@ -74,29 +76,34 @@ def column_pluck(dataf, column):
 
 
 def seasonal(colname, n_knots=12):
-    return Node(
+    return PlaytimePipeline(
         pipeline=make_pipeline(
             FunctionTransformer(datetime_feats, kw_args={"column": colname}),
-            SplineTransformer(extrapolation="periodic", knots="uniform", n_knots=n_knots),
+            SplineTransformer(
+                extrapolation="periodic", knots="uniform", n_knots=n_knots
+            ),
         )
     )
 
 
 def feats(*colnames):
-    return Node(pipeline=SelectCols([col for col in colnames]))
+    return PlaytimePipeline(pipeline=SelectCols([col for col in colnames]))
 
 
 def onehot(*colnames):
-    return Node(pipeline=make_pipeline(SelectCols(colnames), OneHotEncoder()))
+    return PlaytimePipeline(
+        pipeline=make_pipeline(SelectCols(colnames), OneHotEncoder())
+    )
 
 
 def time(colname):
-    return Node(pipeline=SelectCols([colname]))
+    return PlaytimePipeline(pipeline=SelectCols([colname]))
 
 
 def bag_of_words(colname, **kwargs):
-    return Node(
+    return PlaytimePipeline(
         pipeline=make_pipeline(
-            FunctionTransformer(column_pluck, kw_args={"column": colname}), CountVectorizer(**kwargs)
+            FunctionTransformer(column_pluck, kw_args={"column": colname}),
+            CountVectorizer(**kwargs),
         )
     )
