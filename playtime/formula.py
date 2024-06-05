@@ -10,35 +10,14 @@ from sklearn.preprocessing import FunctionTransformer, OneHotEncoder, SplineTran
 from skrub import SelectCols
 
 
-class UnionPolynomialFeaturizer(BaseEstimator, MetaEstimatorMixin):
-    def __init__(self, union_estimator):
-        """Like the normal polynomial featurizer, but in this case only consider the product from different transformers"""
-        self.union_estimator = union_estimator
-
-    def fit(self, X, y=None):
-        X_tfm = self.union_estimator.fit_transform(X)
-        total = X_tfm.shape[1]
-        # todo: kind of hacky. clean?
-        self.split_at_ = (
-            self.union_estimator.transformer_list[0][1].transform(X[:2]).shape[1]
-        )
-        self.shape_out_ = self.split_at_ * (total - self.split_at_)
-        return self
-
-    def transform(self, X):
-        columns = []
-        X_tfm = self.union_estimator.transform(X)
-        if issparse(X_tfm):
-            X_tfm = csc_array(X_tfm)
-        X1, X2 = X_tfm[:, : self.split_at_], X_tfm[:, self.split_at_ :]
-        for x in range(X2.shape[1]):
-            columns.append(X1 * X2[:, [x]])
-        if issparse(X_tfm):
-            return hstack(columns, dtype=X_tfm.dtype).tocsc()
-        return np.hstack(columns, dtype=X_tfm.dtype)
-
-
-class CrossPolyPipeline(BaseEstimator, TransformerMixin):
+class CrossPolyPipeline(BaseEstimator, MetaEstimatorMixin, TransformerMixin):
+    """
+    This estimator is for internal use and is not meant to be used directly.
+    
+    This esitmator multiplies features from different sets. If we have seasonal features and a 
+    day-of-week feature then this estimator can turn that into seasonal features for each day of 
+    the week. 
+    """
     def __init__(self, union_estimator):
         self.union_estimator = union_estimator
         self.transformer_list = union_estimator.transformer_list
@@ -70,9 +49,12 @@ class CrossPolyPipeline(BaseEstimator, TransformerMixin):
         if issparse(X_tfm):
             return hstack(columns, dtype=X_tfm.dtype).tocsc()
         return np.hstack(columns, dtype=X_tfm.dtype)
-
+    
 
 class PlaytimePipeline(BaseEstimator):
+    """
+    The playtime pipeline is a scikit-learn compatible pipeline that is constructed via Python operators.
+    """
     def __init__(self, pipeline):
         self.pipeline = pipeline
 
@@ -100,6 +82,9 @@ class PlaytimePipeline(BaseEstimator):
             old_transformers = [_[1] for _ in other.pipeline.transformer_list]
             unioned_feats = old_transformers + [clone(self.pipeline)]
         return PlaytimePipeline(pipeline=CrossPolyPipeline(unioned_feats))
+    
+    def __or__(self, other):
+        return PlaytimePipeline(pipeline=make_pipeline(clone(self.pipeline), other))
 
     def fit(self, X, y=None, **kwargs):
         self.pipeline.fit(X, y, **kwargs)
@@ -127,6 +112,7 @@ def column_pluck(dataf, column):
 
 
 def seasonal(colname, n_knots=12):
+    """Calculate a yearly seasonal feature from a date column."""
     return PlaytimePipeline(
         pipeline=make_pipeline(
             FunctionTransformer(datetime_feats, kw_args={"column": colname}),
@@ -138,22 +124,21 @@ def seasonal(colname, n_knots=12):
 
 
 def feats(*colnames):
+    """Select features from a dataframe as-is. Meant for numeric features."""
     return PlaytimePipeline(
         pipeline=make_pipeline(SelectCols([col for col in colnames]))
     )
 
 
 def onehot(*colnames):
+    """One-hot encode specified columns, resulting in a sparse set of features."""
     return PlaytimePipeline(
         pipeline=make_pipeline(SelectCols(colnames), OneHotEncoder())
     )
 
 
-def time(colname):
-    return PlaytimePipeline(pipeline=SelectCols([colname]))
-
-
 def bag_of_words(colname, **kwargs):
+    """Generate bag-of-words features on a column, assuming it refers to text."""
     return PlaytimePipeline(
         pipeline=make_pipeline(
             FunctionTransformer(column_pluck, kw_args={"column": colname}),
