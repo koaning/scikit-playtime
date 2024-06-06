@@ -1,7 +1,7 @@
 import pytest
 import numpy as np
 from pathlib import Path
-from playtime.formula import feats, onehot, bag_of_words
+from playtime import feats, onehot, bag_of_words
 import pandas as pd
 import polars as pl
 from sklearn.pipeline import make_pipeline
