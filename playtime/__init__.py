@@ -3,6 +3,7 @@ from sklearn.preprocessing import FunctionTransformer, OneHotEncoder, SplineTran
 from sklearn.feature_extraction.text import CountVectorizer
 from skrub import SelectCols
 from .transformer_functions import column_pluck, datetime_feats
+from .formula import PlaytimePipeline
 
 def seasonal(colname, n_knots=12):
     """Calculate a yearly seasonal feature from a date column."""
