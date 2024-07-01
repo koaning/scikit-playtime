@@ -480,15 +480,15 @@ The pipeline works, and it's fine, but you could wonder if this is *easy*. After
 Playtime offers an API that allows you to declare the aforementioned pipeline by doing this instead:
 
 ```python
-from playtime.formula import feats, onehot
+from playtime import feats, onehot
 
 formula = feats("age", "fare", "sibsp", "parch") + onehot("sex", "pclass")
 ```
 
-This `forumla` object is just an object that can accumulate components and you can access the generated pipeline by checking the `.pipeline` property. 
+This `forumla` object is just an pipeline object that can accumulate components and you can access the generated pipeline. You can inspect it locally and you'll notice the same familiar HTML output in your notebook.
 
 ```python
-formula.pipeline
+formula
 ```
 
 It's pretty much the same pipeline, but it's a lot easier to go ahead and declare. You're mostly dealing with column names and how to encode them, instead of thinking about how scikit-learn constructs a pipeline. 
@@ -499,7 +499,7 @@ It's pretty much the same pipeline, but it's a lot easier to go ahead and declar
 Right now we're just exploring base features and one-hot encoding ... but why stop there? We can also encode the name of the passenger using a bag of words representation! 
 
 ```python
-from playtime.formula import feats, onehot, bag_of_words
+from playtime import feats, onehot, bag_of_words
 
 formula = feats("age", "fare", "sibsp", "parch") + onehot("sex", "pclass") + bag_of_words("name")
 ```
@@ -951,7 +951,7 @@ Sofar we've shown how you might use one hot encoded variables and bag of words r
 We're still exploring all the ways that you might encode data, but just to give one more example, let's consider timeseries. We could generate some features that can help predict seasonal patterns. Internally we're using [this](https://www.youtube.com/watch?v=cEpiqu3QCW0&t=2s) technique, but again, here's all you need:
 
 ```python
-from playtime.formula import seasonal
+from playtime import seasonal
 
 formula = seasonal("timestamp", n_knots=12)
 ```
@@ -968,7 +968,7 @@ import numpy as np
 df = pd.read_csv('datasets/me-temperatures.csv')
 
 # Use a linear model for these seasonal features
-pipe = make_pipeline(formula.pipeline, Ridge())
+pipe = make_pipeline(formula, Ridge())
 # Make the predictions
 pred = pipe.fit(df, df['y']).predict(df)
 

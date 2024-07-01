@@ -50,7 +50,7 @@ The pipeline works, and it's fine, but you could wonder if this is *easy*. After
 Playtime offers an API that allows you to declare the aforementioned pipeline by doing this instead:
 
 ```python
-from playtime.formula import feats, onehot
+from playtime import feats, onehot
 
 formula = feats("age", "fare", "sibsp", "parch") + onehot("sex", "pclass")
 ```
@@ -58,7 +58,8 @@ formula = feats("age", "fare", "sibsp", "parch") + onehot("sex", "pclass")
 This `forumla` object is just an object that can accumulate components and you can access the generated pipeline by checking the `.pipeline` property. 
 
 ```python
-formula.pipeline
+# This object is a scikit-learn pipeline but with operator support!
+formula
 ```
 
 It's pretty much the same pipeline, but it's a lot easier to go ahead and declare. You're mostly dealing with column names and how to encode them, instead of thinking about how scikit-learn constructs a pipeline. 
