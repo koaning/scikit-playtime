@@ -55,14 +55,14 @@ from playtime import feats, onehot
 formula = feats("age", "fare", "sibsp", "parch") + onehot("sex", "pclass")
 ```
 
-This `forumla` object is just an object that can accumulate components and you can access the generated pipeline by checking the `.pipeline` property. 
+This `forumla` object is just an object that can accumulate components.
 
 ```python
 # This object is a scikit-learn pipeline but with operator support!
 formula
 ```
 
-It's pretty much the same pipeline, but it's a lot easier to go ahead and declare. You're mostly dealing with column names and how to encode them, instead of thinking about how scikit-learn constructs a pipeline. 
+It's pretty much the same pipeline as before, but it's a lot easier to go ahead and declare. You're mostly dealing with column names and how to encode them, instead of thinking about how scikit-learn constructs a pipeline. 
 
 This is what `scikit-playtime` is all about, but this is just the start of what it can do. If that sounds interest you can read more on the [documentation page](https://koaning.github.io/playtime/). 
 
