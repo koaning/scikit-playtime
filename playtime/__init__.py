@@ -23,7 +23,7 @@ def feats(*colnames):
         pipeline=make_pipeline(SelectCols([col for col in colnames]))
     )
 
-def selec(*colnames):
+def select(*colnames):
     """Select features from a dataframe as-is. Meant for numeric features."""
     return PlaytimePipeline(
         pipeline=make_pipeline(SelectCols([col for col in colnames]))
