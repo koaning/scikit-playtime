@@ -25,12 +25,8 @@ jobs:
     - name: Install Venv
       run: uv venv --python ${{ matrix.python-version }}
     - name: Source
-      run: source .venv/bin/activate
-    - name: Confirm
-      run: which python
-    - name: Confirm
-      run: python --version
-    - name: Install Dependencies
-      run: uv pip install -e ".[dev]" pytest
-    - name: Test
-      run: uv run pytest
+      run: |
+        source .venv/bin/activate
+        which python
+        uv pip install -e ".[dev]" pytest
+        uv run pytest
