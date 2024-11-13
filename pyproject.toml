@@ -13,15 +13,6 @@ authors = [
     {name = "Vincent D. Warmerdam"},
 ]
 
-dependencies = [
-    "scikit-learn>=1.0",
-    "narwhals>=0.8.14",
-    "skrub",
-    "polars",
-    "importlib-metadata >= 1.0; python_version < '3.8'",
-    "importlib-resources; python_version < '3.9'",
-]
-
 classifiers = [
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.10",
@@ -32,6 +23,18 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
+
+dependencies = [
+    "scikit-learn>=1.0",
+    "narwhals>=0.8.14",
+    "skrub",
+    "polars",
+    "importlib-metadata >= 1.0; python_version < '3.8'",
+    "importlib-resources; python_version < '3.9'",
+]
+
+[project.optional-dependencies]
+lint = ["pre-commit"]
 
 [project.urls]
 repository = "https://github.com/koaning/playtime"

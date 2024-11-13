@@ -65,5 +65,3 @@ def test_pipeline(df, feat_pipe):
     # Confirm that we can gridsearch too
     grid = GridSearchCV(full_pipe, {}, cv=2)
     assert grid.fit(df, y).predict(df).shape
-
-
