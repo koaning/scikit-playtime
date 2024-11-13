@@ -16,12 +16,10 @@ def seasonal(colname, n_knots=12):
         )
     )
 
-
 def feats(*colnames):
     """Select features from a dataframe as-is. Meant for numeric features."""
-    return PlaytimePipeline(
-        pipeline=make_pipeline(SelectCols([col for col in colnames]))
-    )
+    # Still undecided if `select()` is a better name here
+    return select(*colnames)
 
 def select(*colnames):
     """Select features from a dataframe as-is. Meant for numeric features."""
@@ -29,19 +27,25 @@ def select(*colnames):
         pipeline=make_pipeline(SelectCols([col for col in colnames]))
     )
 
-
 def onehot(*colnames):
     """One-hot encode specified columns, resulting in a sparse set of features."""
-    return PlaytimePipeline(
-        pipeline=make_pipeline(SelectCols(colnames), OneHotEncoder())
-    )
+    return select(*colnames) | OneHotEncoder()
 
-
-def bag_of_words(colname, **kwargs):
+def bag_of_words(*colnames, **kwargs):
     """Generate bag-of-words features on a column, assuming it refers to text."""
+
+    # The CountVectorizer is a bit interesting here because it demands a single list of text
+    # that goes goes in. This is impractical if you want to select multiple columns so we wrap
+    # a bunch of things inside of a few `make_union` calls. 
+
     return PlaytimePipeline(
-        pipeline=make_pipeline(
-            FunctionTransformer(column_pluck, kw_args={"column": colname}),
-            CountVectorizer(**kwargs),
+        pipeline=make_union(
+            *[
+                make_pipeline(
+                    FunctionTransformer(column_pluck, kw_args={"column": colname}),
+                    CountVectorizer(**kwargs),
+                )
+                for col in colnames
+            ]
         )
     )
