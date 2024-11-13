@@ -27,7 +27,6 @@ def test_onehot(df):
 
 @pytest.mark.parametrize("df", [pd.read_csv(titanic_path), pl.read_csv(titanic_path)])
 def test_minhash(df):
-    print(df)
     assert minhash("sex", n_components=10).fit_transform(df).shape[1] == 10
     assert minhash("name", n_components=10).fit_transform(df).shape[1] == 10
     assert minhash("sex", "name", n_components=10).fit_transform(df).shape[1] == 20
