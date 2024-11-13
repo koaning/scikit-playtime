@@ -1,7 +1,7 @@
 import pytest
 import numpy as np
 from pathlib import Path
-from playtime import feats, onehot, bag_of_words
+from playtime import feats, onehot, bag_of_words, minhash
 import pandas as pd
 import polars as pl
 from sklearn.pipeline import make_pipeline
@@ -23,6 +23,14 @@ def test_onehot(df):
     assert onehot("sex").fit_transform(df).shape[1] == 2
     assert onehot("pclass").fit_transform(df).shape[1] == 3
     assert onehot("sex", "pclass").fit_transform(df).shape[1] == 5
+
+
+@pytest.mark.parametrize("df", [pd.read_csv(titanic_path), pl.read_csv(titanic_path)])
+def test_minhash(df):
+    print(df)
+    assert minhash("sex", n_components=10).fit_transform(df).shape[1] == 10
+    assert minhash("name", n_components=10).fit_transform(df).shape[1] == 10
+    assert minhash("sex", "name", n_components=10).fit_transform(df).shape[1] == 20
 
 
 @pytest.mark.parametrize("df", [pd.read_csv(titanic_path), pl.read_csv(titanic_path)])
@@ -58,3 +66,5 @@ def test_pipeline(df, feat_pipe):
     # Confirm that we can gridsearch too
     grid = GridSearchCV(full_pipe, {}, cv=2)
     assert grid.fit(df, y).predict(df).shape
+
+
