@@ -3,6 +3,7 @@ import narwhals as nw
 
 from playtime.estimators import SelectCols
 
+
 @pytest.mark.parametrize("lib", ["pandas", "polars"])
 def test_select_cols(lib):
     lib = pytest.importorskip(lib)

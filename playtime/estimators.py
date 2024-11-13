@@ -1,6 +1,7 @@
 import narwhals as nw
 from sklearn.base import BaseEstimator, TransformerMixin
 
+
 class SelectCols(TransformerMixin, BaseEstimator):
     """Select a subset of a DataFrame's columns.
 
