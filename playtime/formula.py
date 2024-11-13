@@ -7,7 +7,7 @@ from sklearn.base import MetaEstimatorMixin, clone, BaseEstimator, TransformerMi
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.pipeline import FeatureUnion, make_pipeline, make_union, Pipeline
 from sklearn.preprocessing import FunctionTransformer, OneHotEncoder, SplineTransformer
-from skrub import SelectCols
+from .estimators import SelectCols
 
 
 class CrossPolyPipeline(MetaEstimatorMixin, TransformerMixin, BaseEstimator):
