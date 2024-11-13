@@ -7,20 +7,20 @@ hide:
 
 > Rethinking machine learning pipelines a bit.
 
-## What does `scikit-playtime` do? 
+## What does `scikit-playtime` do?
 
 I was wondering if there might be an easier way to construct scikit-learn pipelines. Don't get me wrong, scikit-learn is amazing when you want elaborate pipelines (exibit A, exibit B) but maybe there is also a place for something more lightweight and playful. This library is all about exploring that.
 
-Imagine that you are dealing with the titanic dataset. 
+Imagine that you are dealing with the titanic dataset.
 
 ```python
-import pandas as pd 
+import pandas as pd
 
 df = pd.read_csv("https://calmcode.io/static/data/titanic.csv")
 df.head()
 ```
 
-Here's what the dataset looks like. 
+Here's what the dataset looks like.
 
 |   survived |   pclass | name                                                | sex    |   age |    fare |   sibsp |   parch |
 |-----------:|---------:|:----------------------------------------------------|:-------|------:|--------:|--------:|--------:|
@@ -46,9 +46,9 @@ pipe = make_union(
 )
 ```
 
-This pipeline takes the **age**, **fare**, **sibsp** and **parch** features as-is. These features are already numeric so these do not need to be changed. But the **sex** and **pclass** features are candidates to one-hot encode first. These are categorical features, so it helps to encode them as such. 
+This pipeline takes the **age**, **fare**, **sibsp** and **parch** features as-is. These features are already numeric so these do not need to be changed. But the **sex** and **pclass** features are candidates to one-hot encode first. These are categorical features, so it helps to encode them as such.
 
-Here's what the HTML render of the pipeline looks like. 
+Here's what the HTML render of the pipeline looks like.
 
 <div class="lm-Widget jp-RenderedHTMLCommon jp-RenderedHTML jp-mod-trusted jp-OutputArea-output" data-mime-type="text/html"><style>#sk-container-id-4 {
   /* Definition of color scheme common for light and dark mode */
@@ -475,7 +475,7 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 
 The pipeline works, and it's fine, but you could wonder if this is *easy*. After all, you do need to know scikit-learn fairly well in order to build a pipeline this way and you may also need to appreciate Python. There's some nesting happening in here as well, so for a novice or somebody who just immediately wants to make a quick model ... there's some stuff that gets in the way. All of this is fine when you consider that scikit-learn needs to allow for elaborate pipelines ... but if you just want something dead simple ... then you may appreciate another syntax instead.
 
-## Enter playtime. 
+## Enter playtime.
 
 Playtime offers an API that allows you to declare the aforementioned pipeline by doing this instead:
 
@@ -491,12 +491,12 @@ This `forumla` object is just an pipeline object that can accumulate components 
 formula
 ```
 
-It's pretty much the same pipeline, but it's a lot easier to go ahead and declare. You're mostly dealing with column names and how to encode them, instead of thinking about how scikit-learn constructs a pipeline. 
+It's pretty much the same pipeline, but it's a lot easier to go ahead and declare. You're mostly dealing with column names and how to encode them, instead of thinking about how scikit-learn constructs a pipeline.
 
 
-## Lets also do text. 
+## Lets also do text.
 
-Right now we're just exploring base features and one-hot encoding ... but why stop there? We can also encode the name of the passenger using a bag of words representation! 
+Right now we're just exploring base features and one-hot encoding ... but why stop there? We can also encode the name of the passenger using a bag of words representation!
 
 ```python
 from playtime import feats, onehot, bag_of_words
@@ -935,18 +935,18 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
                                                  CountVectorizer())]))])</pre></div> </div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label  sk-toggleable"><label>selectcols</label></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator  sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-14" type="checkbox"><label for="sk-estimator-id-14" class="sk-toggleable__label  sk-toggleable__label-arrow ">SelectCols</label><div class="sk-toggleable__content "><pre>SelectCols(cols=['age', 'fare'])</pre></div> </div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label  sk-toggleable"><label>pipeline-1</label></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-estimator  sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-15" type="checkbox"><label for="sk-estimator-id-15" class="sk-toggleable__label  sk-toggleable__label-arrow ">SelectCols</label><div class="sk-toggleable__content "><pre>SelectCols(cols=('pclass', 'sex'))</pre></div> </div></div><div class="sk-item"><div class="sk-estimator  sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-16" type="checkbox"><label for="sk-estimator-id-16" class="sk-toggleable__label  sk-toggleable__label-arrow ">&nbsp;OneHotEncoder<a class="sk-estimator-doc-link " rel="noopener" target="_blank" href="https://scikit-learn.org/1.4/modules/generated/sklearn.preprocessing.OneHotEncoder.html">?<span>Documentation for OneHotEncoder</span></a></label><div class="sk-toggleable__content "><pre>OneHotEncoder()</pre></div> </div></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label  sk-toggleable"><label>pipeline-2</label></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-estimator  sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-17" type="checkbox"><label for="sk-estimator-id-17" class="sk-toggleable__label  sk-toggleable__label-arrow ">&nbsp;FunctionTransformer<a class="sk-estimator-doc-link " rel="noopener" target="_blank" href="https://scikit-learn.org/1.4/modules/generated/sklearn.preprocessing.FunctionTransformer.html">?<span>Documentation for FunctionTransformer</span></a></label><div class="sk-toggleable__content "><pre>FunctionTransformer(func=&lt;function column_pluck at 0x287266700&gt;,
                     kw_args={'column': 'name'})</pre></div> </div></div><div class="sk-item"><div class="sk-estimator  sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-18" type="checkbox"><label for="sk-estimator-id-18" class="sk-toggleable__label  sk-toggleable__label-arrow ">&nbsp;CountVectorizer<a class="sk-estimator-doc-link " rel="noopener" target="_blank" href="https://scikit-learn.org/1.4/modules/generated/sklearn.feature_extraction.text.CountVectorizer.html">?<span>Documentation for CountVectorizer</span></a></label><div class="sk-toggleable__content "><pre>CountVectorizer()</pre></div> </div></div></div></div></div></div></div></div></div></div></div></div>
 
-Again, as a user you don't need to worry about the internals of the pipeline, you just declare how you want to model. 
+Again, as a user you don't need to worry about the internals of the pipeline, you just declare how you want to model.
 
 ??? question "About that `bag_of_words` representation"
 
-    The `CountVectorizer` in scikit-learn is great for making bag of words representations, but it assumes an iterable of texts as input. That means we can't get use the `SelectCols` object from `skrub` because that will always return a dataframe, even if we only want a single column for it. 
+    The `CountVectorizer` in scikit-learn is great for making bag of words representations, but it assumes an iterable of texts as input. That means we can't get use the `SelectCols` object from `skrub` because that will always return a dataframe, even if we only want a single column for it.
 
-    Again, this is a detail that a modeller should not be concerned with, so `playtime` fixes this internally on your behalf. Part of this involves leveraging [narwhals](https://github.com/narwhals-dev/narwhals) which even allows us to support both polars and pandas in one go. 
+    Again, this is a detail that a modeller should not be concerned with, so `playtime` fixes this internally on your behalf. Part of this involves leveraging [narwhals](https://github.com/narwhals-dev/narwhals) which even allows us to support both polars and pandas in one go.
 
 
 ## Lets also do timeseries.
 
-Sofar we've shown how you might use one hot encoded variables and bag of words representations to preprocess data for a machine learning use-case. This covers a lot of ground already, but why stop here? 
+Sofar we've shown how you might use one hot encoded variables and bag of words representations to preprocess data for a machine learning use-case. This covers a lot of ground already, but why stop here?
 
 We're still exploring all the ways that you might encode data, but just to give one more example, let's consider timeseries. We could generate some features that can help predict seasonal patterns. Internally we're using [this](https://www.youtube.com/watch?v=cEpiqu3QCW0&t=2s) technique, but again, here's all you need:
 
@@ -956,12 +956,12 @@ from playtime import seasonal
 formula = seasonal("timestamp", n_knots=12)
 ```
 
-Again, this formula contains a pipeline that we can pass to a model. 
+Again, this formula contains a pipeline that we can pass to a model.
 
 ```python
 from sklearn.pipeline import make_pipeline
 from sklearn.linear_model import Ridge
-import matplotlib.pylab as plt 
+import matplotlib.pylab as plt
 import numpy as np
 
 # Load data that has a timestamp column and a `y` target column
