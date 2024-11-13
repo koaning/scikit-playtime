@@ -31,6 +31,6 @@ jobs:
     - name: Confirm
       run: python --version
     - name: Install Dependencies
-      run: uv pip install -e ".[dev]"
+      run: uv pip install -e ".[dev]" pytest
     - name: Test
       run: uv run pytest
