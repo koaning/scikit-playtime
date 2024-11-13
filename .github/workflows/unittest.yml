@@ -33,4 +33,4 @@ jobs:
     - name: Install Dependencies
       run: uv pip install -e ".[dev]" pytest
     - name: Test
-      run: pytest
+      run: python -m pytest
