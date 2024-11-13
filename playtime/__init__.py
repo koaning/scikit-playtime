@@ -42,7 +42,7 @@ def bag_of_words(*colnames, **kwargs):
         pipeline=make_union(
             *[
                 make_pipeline(
-                    FunctionTransformer(column_pluck, kw_args={"column": colname}),
+                    FunctionTransformer(column_pluck, kw_args={"column": col}),
                     CountVectorizer(**kwargs),
                 )
                 for col in colnames
