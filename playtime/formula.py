@@ -1,23 +1,19 @@
 import itertools as it
-import narwhals as nw
 import numpy as np
-import polars as pl
 from scipy.sparse import csc_array, hstack, issparse
 from sklearn.base import MetaEstimatorMixin, clone, BaseEstimator, TransformerMixin
-from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.pipeline import FeatureUnion, make_pipeline, make_union, Pipeline
-from sklearn.preprocessing import FunctionTransformer, OneHotEncoder, SplineTransformer
-from .estimators import SelectCols
 
 
 class CrossPolyPipeline(MetaEstimatorMixin, TransformerMixin, BaseEstimator):
     """
     This estimator is for internal use and is not meant to be used directly.
-    
-    This esitmator multiplies features from different sets. If we have seasonal features and a 
-    day-of-week feature then this estimator can turn that into seasonal features for each day of 
-    the week. 
+
+    This esitmator multiplies features from different sets. If we have seasonal features and a
+    day-of-week feature then this estimator can turn that into seasonal features for each day of
+    the week.
     """
+
     def __init__(self, union_estimator):
         self.union_estimator = union_estimator
         self.transformer_list = union_estimator.transformer_list
@@ -49,12 +45,13 @@ class CrossPolyPipeline(MetaEstimatorMixin, TransformerMixin, BaseEstimator):
         if issparse(X_tfm):
             return hstack(columns, dtype=X_tfm.dtype).tocsc()
         return np.hstack(columns, dtype=X_tfm.dtype)
-    
+
 
 class PlaytimePipeline(BaseEstimator):
     """
     The playtime pipeline is a scikit-learn compatible pipeline that is constructed via Python operators.
     """
+
     def __init__(self, pipeline):
         self.pipeline = pipeline
 
@@ -82,7 +79,7 @@ class PlaytimePipeline(BaseEstimator):
             old_transformers = [_[1] for _ in other.pipeline.transformer_list]
             unioned_feats = old_transformers + [clone(self.pipeline)]
         return PlaytimePipeline(pipeline=CrossPolyPipeline(unioned_feats))
-    
+
     def __or__(self, other):
         return PlaytimePipeline(pipeline=make_pipeline(clone(self.pipeline), other))
 

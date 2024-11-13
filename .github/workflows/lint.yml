@@ -1,0 +1,30 @@
+name: Run code format checks
+
+on:
+  push:
+    branches:
+      - "main"
+  pull_request:
+    branches:
+      - '*'
+
+jobs:
+  run-pre-commit-checks:
+    name: Run pre-commit checks
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Install uv
+      uses: astral-sh/setup-uv@v2
+    - name: Set up Python 3.12
+      run: uv python install 3.12
+    - name: Install Venv
+      run: uv venv --python 3.12
+    - name: Linter
+      run: |
+        source .venv/bin/activate
+        which python
+        python --version
+        uv pip install -e .[lint]
+        pre-commit install && pre-commit run -v --all-files --show-diff-on-failure
