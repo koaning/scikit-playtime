@@ -23,7 +23,7 @@ jobs:
     - name: Set up Python ${{ matrix.python-version }}
       run: uv python install ${{ matrix.python-version }}
     - name: Install Venv
-      run: uv venv
+      run: uv venv --python ${{ matrix.python-version }}
     - name: Install Dependencies
       run: uv pip install -e ".[dev]"
     - name: Test
