@@ -989,11 +989,19 @@ Feel like playing around with this? You can do this right now by installing via 
 python -m pip install scikit-playtime
 ```
 
-That said, please consider this to be an experimental project where things may break. There is still much to explore here and that will be done in public. In the future this project will explore:
+That said, please consider this to be an experimental project. There is still much to explore here and that will be done in public. In the future this project will explore:
 
 - How we might come up with more clever featurisation methods. We may be able to capture plenty more common feature patterns with simple functions that we can chain add together.
 - How different operators might help improve things. Maybe the `*` operator can be used to generate a cross product between features and maybe the `|` operator can be used to pass features to actual scikit-learn components like `PCA()`.
 - How we might consider methods that can accept a `playtime` pipeline and can do more elaborate modelling on top. Maybe we can be clever about how we generate multi-output models for timeseries tasks. Think about quantiles or multi label use-cases.
+
+## API
+
+::: playtime.select
+    handler: python
+    options:
+        heading_level: 4
+        show_symbol_type_toc: true
 
 ## Thanks
 

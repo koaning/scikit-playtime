@@ -24,7 +24,22 @@ def feats(*colnames):
     return select(*colnames)
 
 def select(*colnames):
-    """Select features from a dataframe as-is. Meant for numeric features."""
+    """
+    **select**
+
+    Select features from a dataframe as-is. Meant for numeric features.
+    
+    Arguments:
+        colnames: names of columns to select
+    
+    **Usage**
+
+    ```python
+    from playtime import select 
+
+    pipeline = select("col_a", "col_b")
+    ```
+    """
     return PlaytimePipeline(
         pipeline=make_pipeline(SelectCols([col for col in colnames]))
     )
