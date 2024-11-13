@@ -997,7 +997,7 @@ That said, please consider this to be an experimental project. There is still mu
 
 ## API
 
-::: playtime.select
+::: playtime
     handler: python
     options:
         heading_level: 4

@@ -25,8 +25,6 @@ def feats(*colnames: str) -> PlaytimePipeline:
 
 def select(*colnames: str) -> PlaytimePipeline:
     """
-    **select**
-
     Select features from a dataframe as-is. Meant for numeric features.
     
     Arguments:
@@ -46,8 +44,6 @@ def select(*colnames: str) -> PlaytimePipeline:
 
 def onehot(*colnames: str, **kwargs) -> PlaytimePipeline:
     """
-    **onehot**
-
     One-hot encode specified columns, resulting in a sparse set of features.
     This transformer will convert categorical variables into a format that can be provided to machine learning algorithms.
     
@@ -67,8 +63,6 @@ def onehot(*colnames: str, **kwargs) -> PlaytimePipeline:
 
 def minhash(*colnames: str, **kwargs) -> PlaytimePipeline:
     """
-    **minhash**
-
     Create min-hash features for specified columns, resulting in a dense set of features.
     
     Arguments:
@@ -88,8 +82,6 @@ def minhash(*colnames: str, **kwargs) -> PlaytimePipeline:
 
 def bag_of_words(*colnames: str, **kwargs) -> PlaytimePipeline:
     """
-    **bag_of_words**
-
     Generate bag-of-words features from text columns. This transformer converts text data into a 
     sparse matrix of token counts, where each column represents a word from the vocabulary and 
     each row represents the frequency of words in the text.
@@ -110,8 +102,6 @@ def bag_of_words(*colnames: str, **kwargs) -> PlaytimePipeline:
 
 def embed_text(*colnames: str, name: str = 'all-MiniLM-L6-v2', **kwargs) -> PlaytimePipeline:
     """
-    **embed_text**
-
     Generate text embedding features using sentence-transformers (via embetter).
     
     Arguments:
@@ -136,8 +126,6 @@ def embed_text(*colnames: str, name: str = 'all-MiniLM-L6-v2', **kwargs) -> Play
 
 def embed_image(*colnames: str) -> PlaytimePipeline:
     """
-    **embed_image**
-
     Generate image embedding features using CLIP (Contrastive Language-Image Pre-Training) with 
     sentence-transformers (via embetter).
     
