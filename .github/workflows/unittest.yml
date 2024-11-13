@@ -28,5 +28,6 @@ jobs:
       run: |
         source .venv/bin/activate
         which python
-        uv pip install -e ".[dev]" pytest
+        python --version
+        uv pip install -e . pytest
         uv run pytest
