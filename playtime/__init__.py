@@ -1,4 +1,4 @@
-from sklearn.pipeline import make_pipeline
+from sklearn.pipeline import make_pipeline, make_union
 from sklearn.preprocessing import FunctionTransformer, OneHotEncoder, SplineTransformer
 from sklearn.feature_extraction.text import CountVectorizer
 from skrub import SelectCols
