@@ -34,10 +34,6 @@ def onehot(*colnames):
 def bag_of_words(*colnames, **kwargs):
     """Generate bag-of-words features on a set of column, assuming it refers to text."""
 
-    # The CountVectorizer is a bit interesting here because it demands a single list of text
-    # that goes goes in. This is impractical if you want to select multiple columns so we wrap
-    # a bunch of things inside of a few `make_union` calls. 
-
     return PlaytimePipeline(
         pipeline=make_union(
             *[
