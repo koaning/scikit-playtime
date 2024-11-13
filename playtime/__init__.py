@@ -142,7 +142,6 @@ def embed_image(*colnames: str) -> PlaytimePipeline:
 
     Note: The columns should contain valid paths to image files that can be loaded by PIL/Pillow.
     """
-    from embetter.grab import ColumnGrabber
     from embetter.vision import ImageLoader
     from embetter.multi import ClipEncoder
 
