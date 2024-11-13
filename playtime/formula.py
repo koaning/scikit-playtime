@@ -10,7 +10,7 @@ from sklearn.preprocessing import FunctionTransformer, OneHotEncoder, SplineTran
 from skrub import SelectCols
 
 
-class CrossPolyPipeline(BaseEstimator, MetaEstimatorMixin, TransformerMixin):
+class CrossPolyPipeline(MetaEstimatorMixin, TransformerMixin, BaseEstimator):
     """
     This estimator is for internal use and is not meant to be used directly.
     
