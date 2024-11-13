@@ -22,6 +22,9 @@ dependencies = [
     "importlib-resources; python_version < '3.9'",
 ]
 
+[project.optional-dependencies]
+lint = ["pre-commit"]
+
 classifiers = [
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.10",
