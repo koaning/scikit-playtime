@@ -45,3 +45,10 @@ def bag_of_words(colname, **kwargs):
             CountVectorizer(**kwargs),
         )
     )
+
+def min_hash(*colnames, **kwargs):
+    """Generate min-hash features from a column."""
+    from skrub import MinHashEncoder
+    return PlaytimePipeline(
+        pipeline=make_pipeline(SelectCols(colnames), MinHashEncoder(**kwargs))
+    )
