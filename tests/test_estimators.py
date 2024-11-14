@@ -1,5 +1,4 @@
 import pytest
-import narwhals as nw
 
 from playtime.estimators import SelectCols
 
@@ -8,7 +7,7 @@ from playtime.estimators import SelectCols
 def test_select_cols(lib):
     lib = pytest.importorskip(lib)
 
-    df = nw.from_native(lib.DataFrame({"a": [1, 2], "b": [10, 20], "c": ["x", "y"]}))
+    df = lib.DataFrame({"a": [1, 2], "b": [10, 20], "c": ["x", "y"]})
     tfm = SelectCols(["a", "b"])
     # This should work w/o calling `fit`
     assert tfm.transform(df).columns == ["a", "b"]
