@@ -3,7 +3,7 @@ from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import FunctionTransformer, OneHotEncoder, SplineTransformer
 from sklearn.compose import make_column_transformer
 from sklearn.feature_extraction.text import CountVectorizer
-from skrub import SelectCols
+from .estimators import SelectCols
 from .transformer_functions import datetime_feats
 from .formula import PlaytimePipeline
 from typing import Any
@@ -41,9 +41,7 @@ def select(*colnames: str) -> PlaytimePipeline:
     pipeline = select("col_a", "col_b")
     ```
     """
-    return PlaytimePipeline(
-        pipeline=make_pipeline(SelectCols([col for col in colnames]))
-    )
+    return PlaytimePipeline(pipeline=make_pipeline(SelectCols(colnames)))
 
 
 def onehot(*colnames: str, **kwargs) -> PlaytimePipeline:

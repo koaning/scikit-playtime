@@ -29,5 +29,5 @@ jobs:
         source .venv/bin/activate
         which python
         python --version
-        uv pip install -e . pytest
+        uv pip install -e .[test]
         uv run pytest

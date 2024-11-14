@@ -35,6 +35,7 @@ dependencies = [
 
 [project.optional-dependencies]
 lint = ["pre-commit"]
+test = ["pytest", "pandas"]
 
 [project.urls]
 repository = "https://github.com/koaning/playtime"
