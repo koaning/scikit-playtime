@@ -4,7 +4,7 @@
 
 ## What does `scikit-playtime` do?
 
-I was wondering if there might be an easier way to construct scikit-learn pipelines. Don't get me wrong, scikit-learn is amazing when you want elaborate pipelines (exhibit A, exhibit B) but maybe there is also a place for something more lightweight and playful. This library is all about exploring that.
+I was wondering if there might be an easier way to construct scikit-learn pipelines. Don't get me wrong, scikit-learn is amazing when you want elaborate pipelines ([exhibit A](https://www.youtube.com/watch?v=7TZ7j4HSzmE), [exhibit B](https://www.youtube.com/watch?v=lhMqqauXtW0)) but maybe there is also a place for something more lightweight and playful. This library is all about exploring that.
 
 Imagine that you are dealing with the titanic dataset.
 
