@@ -4,7 +4,7 @@
 
 ## What does `scikit-playtime` do?
 
-I was wondering if there might be an easier way to construct scikit-learn pipelines. Don't get me wrong, scikit-learn is amazing when you want elaborate pipelines (exibit A, exibit B) but maybe there is also a place for something more lightweight and playful. This library is all about exploring that.
+I was wondering if there might be an easier way to construct scikit-learn pipelines. Don't get me wrong, scikit-learn is amazing when you want elaborate pipelines (exhibit A, exhibit B) but maybe there is also a place for something more lightweight and playful. This library is all about exploring that.
 
 Imagine that you are dealing with the titanic dataset.
 
@@ -55,7 +55,7 @@ from playtime import feats, onehot
 formula = feats("age", "fare", "sibsp", "parch") + onehot("sex", "pclass")
 ```
 
-This `forumla` object is just an object that can accumulate components.
+This `formula` object is just an object that can accumulate components.
 
 ```python
 # This object is a scikit-learn pipeline but with operator support!
@@ -66,7 +66,7 @@ formula
 
 It's pretty much the same pipeline as before, but it's a lot easier to go ahead and declare. You're mostly dealing with column names and how to encode them, instead of thinking about how scikit-learn constructs a pipeline.
 
-This is what `scikit-playtime` is all about, but this is just the start of what it can do. If that sounds interest you can read more on the [documentation page](https://koaning.github.io/playtime/).
+This is what `scikit-playtime` is all about, but this is just the start of what it can do. If that sounds interest you can read more on the [documentation page](https://koaning.github.io/scikit-playtime/).
 
 Alternative you may also explore this tool by installing it via:
 
