@@ -2,20 +2,20 @@
 
 > Rethinking machine learning pipelines a bit.
 
-## What does `scikit-playtime` do? 
+## What does `scikit-playtime` do?
 
-I was wondering if there might be an easier way to construct scikit-learn pipelines. Don't get me wrong, scikit-learn is amazing when you want elaborate pipelines (exibit A, exibit B) but maybe there is also a place for something more lightweight and playful. This library is all about exploring that.
+I was wondering if there might be an easier way to construct scikit-learn pipelines. Don't get me wrong, scikit-learn is amazing when you want elaborate pipelines ([exhibit A](https://www.youtube.com/watch?v=7TZ7j4HSzmE), [exhibit B](https://www.youtube.com/watch?v=lhMqqauXtW0)) but maybe there is also a place for something more lightweight and playful. This library is all about exploring that.
 
-Imagine that you are dealing with the titanic dataset. 
+Imagine that you are dealing with the titanic dataset.
 
 ```python
-import pandas as pd 
+import pandas as pd
 
 df = pd.read_csv("https://calmcode.io/static/data/titanic.csv")
 df.head()
 ```
 
-Here's what the dataset looks like. 
+Here's what the dataset looks like.
 
 |   survived |   pclass | name                                                | sex    |   age |    fare |   sibsp |   parch |
 |-----------:|---------:|:----------------------------------------------------|:-------|------:|--------:|--------:|--------:|
@@ -41,11 +41,11 @@ pipe = make_union(
 )
 ```
 
-This pipeline takes the **age**, **fare**, **sibsp** and **parch** features as-is. These features are already numeric so these do not need to be changed. But the **sex** and **pclass** features are candidates to one-hot encode first. These are categorical features, so it helps to encode them as such. 
+This pipeline takes the **age**, **fare**, **sibsp** and **parch** features as-is. These features are already numeric so these do not need to be changed. But the **sex** and **pclass** features are candidates to one-hot encode first. These are categorical features, so it helps to encode them as such.
 
 The pipeline works, and it's fine, but you could wonder if this is *easy*. After all, you do need to know scikit-learn fairly well in order to build a pipeline this way and you may also need to appreciate Python. There's some nesting happening in here as well, so for a novice or somebody who just immediately wants to make a quick model ... there's some stuff that gets in the way. All of this is fine when you consider that scikit-learn needs to allow for elaborate pipelines ... but if you just want something dead simple ... then you may appreciate another syntax instead.
 
-## Enter playtime. 
+## Enter playtime.
 
 Playtime offers an API that allows you to declare the aforementioned pipeline by doing this instead:
 
@@ -55,16 +55,18 @@ from playtime import feats, onehot
 formula = feats("age", "fare", "sibsp", "parch") + onehot("sex", "pclass")
 ```
 
-This `forumla` object is just an object that can accumulate components.
+This `formula` object is just an object that can accumulate components.
 
 ```python
 # This object is a scikit-learn pipeline but with operator support!
 formula
 ```
 
-It's pretty much the same pipeline as before, but it's a lot easier to go ahead and declare. You're mostly dealing with column names and how to encode them, instead of thinking about how scikit-learn constructs a pipeline. 
+![playtime](docs/imgs/pipe-demo.png)
 
-This is what `scikit-playtime` is all about, but this is just the start of what it can do. If that sounds interest you can read more on the [documentation page](https://koaning.github.io/playtime/). 
+It's pretty much the same pipeline as before, but it's a lot easier to go ahead and declare. You're mostly dealing with column names and how to encode them, instead of thinking about how scikit-learn constructs a pipeline.
+
+This is what `scikit-playtime` is all about, but this is just the start of what it can do. If that sounds interest you can read more on the [documentation page](https://koaning.github.io/scikit-playtime/).
 
 Alternative you may also explore this tool by installing it via:
 
