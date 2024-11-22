@@ -9,11 +9,18 @@ from .formula import PlaytimePipeline
 from typing import Any
 
 
-def seasonal(colname: str, n_knots: int = 12) -> PlaytimePipeline:
-    """Calculate a yearly seasonal feature from a date column."""
+def seasonal(colname: str, n_knots: int = 12, kind: str = "days", format: str = None) -> PlaytimePipeline:
+    """Calculate a yearly seasonal feature from a date column.
+
+    Arguments:
+        colname: name of the date column
+        n_knots: number of knots to use in the spline transformer
+        kind: kind of seasonal feature to calculate ("days", "hours", "minutes")
+        format: format of the date column
+    """
     return PlaytimePipeline(
         pipeline=make_pipeline(
-            FunctionTransformer(datetime_feats, kw_args={"column": colname}),
+            FunctionTransformer(datetime_feats, kw_args={"column": colname, "kind": kind, "format": format}),
             SplineTransformer(
                 extrapolation="periodic", knots="uniform", n_knots=n_knots
             ),

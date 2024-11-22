@@ -1,8 +1,8 @@
 .PHONY: docs
 
 install:
-	python -m pip install -e .
-	python -m pip install polars pandas pytest ruff
+	uv pip install -e .
+	uv pip install polars pandas pytest ruff
 
 docs:
 	mkdocs serve
@@ -20,6 +20,5 @@ lint:
 check: lint precommit test clean
 
 pypi: clean
-	python setup.py sdist
-	python setup.py bdist_wheel --universal
-	twine upload dist/*
+	uv build
+	uv publish
