@@ -1,6 +1,6 @@
 import pytest
 
-from playtime.estimators import SelectCols
+from skplay.estimators import SelectCols
 
 
 @pytest.mark.parametrize("lib", ["pandas", "polars"])

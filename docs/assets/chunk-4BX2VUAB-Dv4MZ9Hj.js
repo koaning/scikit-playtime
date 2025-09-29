@@ -1,0 +1,1 @@
+import{_ as l}from"./mermaid.core-CvvJtCRj.js";function s(c,t){var i,a,o;c.accDescr&&((i=t.setAccDescription)==null||i.call(t,c.accDescr)),c.accTitle&&((a=t.setAccTitle)==null||a.call(t,c.accTitle)),c.title&&((o=t.setDiagramTitle)==null||o.call(t,c.title))}l(s,"populateCommonDb");export{s as p};

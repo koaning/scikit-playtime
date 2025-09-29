@@ -1,8 +1,8 @@
-# scikit-playtime
+# scikit-play
 
 > Rethinking machine learning pipelines a bit.
 
-## What does `scikit-playtime` do?
+## What does `scikit-play` do?
 
 I was wondering if there might be an easier way to construct scikit-learn pipelines. Don't get me wrong, scikit-learn is amazing when you want elaborate pipelines ([exhibit A](https://www.youtube.com/watch?v=7TZ7j4HSzmE), [exhibit B](https://www.youtube.com/watch?v=lhMqqauXtW0)) but maybe there is also a place for something more lightweight and playful. This library is all about exploring that.
 
@@ -45,12 +45,12 @@ This pipeline takes the **age**, **fare**, **sibsp** and **parch** features as-i
 
 The pipeline works, and it's fine, but you could wonder if this is *easy*. After all, you do need to know scikit-learn fairly well in order to build a pipeline this way and you may also need to appreciate Python. There's some nesting happening in here as well, so for a novice or somebody who just immediately wants to make a quick model ... there's some stuff that gets in the way. All of this is fine when you consider that scikit-learn needs to allow for elaborate pipelines ... but if you just want something dead simple ... then you may appreciate another syntax instead.
 
-## Enter playtime.
+## Enter skplay.
 
-Playtime offers an API that allows you to declare the aforementioned pipeline by doing this instead:
+Skplay offers an API that allows you to declare the aforementioned pipeline by doing this instead:
 
 ```python
-from playtime import feats, onehot
+from skplay import feats, onehot
 
 formula = feats("age", "fare", "sibsp", "parch") + onehot("sex", "pclass")
 ```
@@ -62,16 +62,16 @@ This `formula` object is just an object that can accumulate components.
 formula
 ```
 
-![playtime](docs/imgs/pipe-demo.png)
+![skplay](docs/imgs/pipe-demo.png)
 
 It's pretty much the same pipeline as before, but it's a lot easier to go ahead and declare. You're mostly dealing with column names and how to encode them, instead of thinking about how scikit-learn constructs a pipeline.
 
-This is what `scikit-playtime` is all about, but this is just the start of what it can do. If that sounds interest you can read more on the [documentation page](https://koaning.github.io/scikit-playtime/).
+This is what `scikit-play` is all about, but this is just the start of what it can do. If that sounds interest you can read more on the [documentation page](https://koaning.github.io/scikit-play/).
 
 Alternative you may also explore this tool by installing it via:
 
 ```
-python -m pip install scikit-playtime
+python -m pip install scikit-play
 ```
 
 ## Thanks
