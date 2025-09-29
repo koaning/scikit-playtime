@@ -12,10 +12,10 @@ titanic_path = Path(__file__).parent / "data" / "titanic.csv"
 
 
 @pytest.mark.parametrize("df", [pd.read_csv(titanic_path), pl.read_csv(titanic_path)])
-def test_feats(df):
-    assert feats("age").fit_transform(df).shape[1] == 1
-    assert feats("age", "fare").fit_transform(df).shape[1] == 2
-    assert feats("age", "fare", "sibsp", "parch").fit_transform(df).shape[1] == 4
+def test_select(df):
+    assert select("age").fit_transform(df).shape[1] == 1
+    assert select("age", "fare").fit_transform(df).shape[1] == 2
+    assert select("age", "fare", "sibsp", "parch").fit_transform(df).shape[1] == 4
 
 
 @pytest.mark.parametrize("df", [pd.read_csv(titanic_path), pl.read_csv(titanic_path)])

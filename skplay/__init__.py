@@ -1,12 +1,14 @@
+from typing import Any
+
 from sklearn.base import clone
 from sklearn.pipeline import make_pipeline
-from sklearn.preprocessing import FunctionTransformer, OneHotEncoder, SplineTransformer
+from sklearn.preprocessing import FunctionTransformer, OneHotEncoder, SplineTransformer, StandardScaler, QuantileTransformer
 from sklearn.compose import make_column_transformer
 from sklearn.feature_extraction.text import CountVectorizer
+
 from .estimators import SelectCols
 from .transformer_functions import datetime_feats
 from .formula import PlaytimePipeline
-from typing import Any
 
 
 def seasonal(colname: str, n_knots: int = 12) -> PlaytimePipeline:
@@ -29,6 +31,13 @@ def spline(n_knots: int = 12, knots="quantile", extrapolation="continue") -> Pla
             ),
         )
     )
+
+def scaled(*colnames: str, method="quantile", **kwargs) -> PlaytimePipeline:
+    if method == "standard":
+        return select(*colnames) | StandardScaler(**kwargs)
+    if method == "quantile":
+        return select(*colnames) | QuantileTransformer(**kwargs)
+    raise ValueError("`method` must be standard or quantile.")
 
 def feats(*colnames: str) -> PlaytimePipeline:
     """Select features from a dataframe as-is. Meant for numeric features."""
