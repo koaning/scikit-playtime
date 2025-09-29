@@ -3,7 +3,7 @@ requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "scikit-playtime"
+name = "scikit-play"
 version = "0.1.2"
 description="Rethinking machine learning pipelines a bit."
 
@@ -36,14 +36,15 @@ dependencies = [
 [project.optional-dependencies]
 lint = ["pre-commit"]
 test = ["pytest", "pandas"]
+dev = ["marimo", "pre-commit", "pytest", "pandas"]
 
 [project.urls]
-repository = "https://github.com/koaning/playtime"
-issue-tracker = "https://github.com/koaning/playtime/issues"
-documentation = "https://koaning.github.io/playtime/"
+repository = "https://github.com/koaning/scikit-play"
+issue-tracker = "https://github.com/koaning/scikit-play/issues"
+documentation = "https://koaning.github.io/scikit-play/"
 
 [tool.setuptools.packages.find]
-include = ["playtime*"]
+include = ["skplay*"]
 exclude = [
     "docs",
     "images",

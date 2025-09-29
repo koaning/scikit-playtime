@@ -1,0 +1,1 @@
+import{b as a,a as c}from"./_baseEach--KDTwKbG.js";import{B as e}from"./index-CelXfcd8.js";function m(r,o,u,t){for(var n=-1,f=r==null?0:r.length;++n<f;){var i=r[n];o(t,i,u(i),r)}return t}function s(r,o,u,t){return a(r,function(n,f,i){o(t,n,u(n),i)}),t}function l(r,o){return function(u,t){var n=e(u)?m:s,f=o?o():{};return n(u,r,c(t),f)}}export{l as c};
